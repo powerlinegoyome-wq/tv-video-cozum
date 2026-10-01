@@ -1,5 +1,6 @@
 package com.videocozum.tv;
 
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,12 +58,28 @@ public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.ViewHolder
         SourceItem item = displayList.get(position);
         holder.txtName.setText(item.name);
 
-        if (item.isParent) {
-            holder.imgAction.setImageResource(R.drawable.ic_chevron_right);
-        } else {
-            // Soru satırında oynat ikonu göster (Ekran görüntüsü 6 gibi)
+        if (item.type == SourceItem.TYPE_QUESTION) {
+            // Soru satırında oynat ikonu göster
             holder.imgAction.setImageResource(R.drawable.ic_play_circle);
+        } else {
+            // Kategori veya Test satırında sağ ok ikonu göster
+            holder.imgAction.setImageResource(R.drawable.ic_chevron_right);
         }
+
+        // TV Kumandası odaklanma efekti (Turuncu Çerçeve & Canlı Metin & Büyütme)
+        holder.itemView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                holder.txtName.setTextColor(0xFFD84315); // Turuncu-kırmızı vurgu
+                holder.txtName.setTypeface(null, Typeface.BOLD);
+                holder.itemView.animate().scaleX(1.025f).scaleY(1.025f).setDuration(120).start();
+                holder.itemView.setElevation(8f);
+            } else {
+                holder.txtName.setTextColor(0xFF374151); // Normal koyu gri
+                holder.txtName.setTypeface(null, Typeface.NORMAL);
+                holder.itemView.animate().scaleX(1.0f).scaleY(1.0f).setDuration(120).start();
+                holder.itemView.setElevation(0f);
+            }
+        });
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {

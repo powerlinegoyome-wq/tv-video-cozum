@@ -15,6 +15,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -47,8 +48,10 @@ public class TVPlayerActivity extends AppCompatActivity {
         setupWebView();
 
         String targetUrl = getIntent().getStringExtra("TARGET_URL");
-        if (targetUrl == null || targetUrl.isEmpty()) {
-            targetUrl = "https://www.akilliogretim.com";
+        if (targetUrl == null || targetUrl.trim().isEmpty()) {
+            Toast.makeText(this, "Video adresi bulunamadı!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
 
         webView.loadUrl(targetUrl);
@@ -90,7 +93,7 @@ public class TVPlayerActivity extends AppCompatActivity {
         settings.setDisplayZoomControls(false);
         settings.setMediaPlaybackRequiresUserGesture(false);
 
-        // Web sitelerinin "Uygulamayı İndir" mobilde kalmasını engellemek için masaüstü/TV User-Agent
+        // Web sitelerinin mobil uygulamayı indirin uyarısı yerine masaüstü/TV sürümünü sunması için
         settings.setUserAgentString("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 VideoCozumTV/1.0");
 
         webView.setWebChromeClient(new WebChromeClient() {
@@ -150,14 +153,14 @@ public class TVPlayerActivity extends AppCompatActivity {
                     webView.evaluateJavascript(remoteEngineJs, null);
                 }
 
-                // Sayfada varsa rahatsız edici mobil uygulama reklam pencerelerini gizle
+                // TV Ekranı için Tam Ekran ve Kumanda Kontrol Scripti
                 String cssCleanup = "javascript:(function() {" +
-                        "var elms = document.querySelectorAll('.app-banner, .mobile-app-download, #smart-banner');" +
+                        "var elms = document.querySelectorAll('.app-banner, .mobile-app-download, #smart-banner, .bannerArea');" +
                         "elms.forEach(function(el){ el.style.display = 'none'; });" +
                         "var canvas = document.getElementById('canvas');" +
                         "if (canvas) {" +
                         "  canvas.style.maxWidth = '100%';" +
-                        "  canvas.style.maxHeight = '88vh';" +
+                        "  canvas.style.maxHeight = '90vh';" +
                         "  canvas.style.margin = '0 auto';" +
                         "  canvas.style.display = 'block';" +
                         "  document.body.style.backgroundColor = '#000000';" +
@@ -165,7 +168,7 @@ public class TVPlayerActivity extends AppCompatActivity {
                         "}" +
                         "var audio = document.getElementById('sound');" +
                         "if (audio) {" +
-                        "  audio.play();" +
+                        "  audio.play().catch(function(e){ console.log(e); });" +
                         "  window.addEventListener('keydown', function(e) {" +
                         "    if (e.key === 'Enter' || e.keyCode === 13) {" +
                         "      if (audio.paused) audio.play(); else audio.pause();" +

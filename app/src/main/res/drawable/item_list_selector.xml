@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- TV Kumandası ile üzerine gelindiğinde (Focused) -->
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <solid android:color="#FEF2F2" />
-            <stroke android:width="2dp" android:color="#F45C43" />
+            <solid android:color="#FFF3E0" />
+            <stroke android:width="3.5dp" android:color="#FF5722" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
+
+    <!-- Kumanda OK tuşuna basıldığında (Pressed) -->
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <solid android:color="#FEE2E2" />
+            <solid android:color="#FFE0B2" />
+            <stroke android:width="3.5dp" android:color="#E64A19" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
+
+    <!-- Normal Durum -->
     <item>
         <shape android:shape="rectangle">
             <solid android:color="#FFFFFF" />
+            <stroke android:width="1dp" android:color="#E2E8F0" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
 </selector>

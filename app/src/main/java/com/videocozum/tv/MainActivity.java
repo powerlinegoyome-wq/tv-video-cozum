@@ -8,8 +8,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,14 +50,28 @@ public class MainActivity extends AppCompatActivity implements SourceAdapter.OnI
     private Stack<NavigationStep> navStack = new Stack<>();
     private List<SourceItem> currentItems = new ArrayList<>();
 
+    // Yayınevi Sekmeleri
+    private Button btnTabAltinKarma;
+    private Button btnTabOkyanus;
+    private TextView txtBadgeLine1;
+    private TextView txtBadgeLine2;
+    private LinearLayout containerAltinKarma;
+    private LinearLayout containerOkyanus;
+
+    // Altın Karma Görünümleri
     private View layoutHeaderBar;
     private ImageButton btnBack;
     private TextView txtHeaderTitle;
     private EditText edtSearch;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
-
     private SourceAdapter adapter;
+
+    // Okyanus Görünümleri
+    private EditText edtOkyanusCode;
+    private Button btnOkyanusGo;
+    private Button btnOpenAkilliogretim;
+
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -66,13 +82,22 @@ public class MainActivity extends AppCompatActivity implements SourceAdapter.OnI
         setContentView(R.layout.activity_main);
 
         initViews();
+        setupPublisherTabs();
         setupSearch();
+        setupOkyanus();
 
-        // En üst seviye kategorileri yükle (Altın Karma Kütüphanesi - ID: 2)
-        loadLevel("2", "", true);
+        // Varsayılan olarak Altın Karma Kütüphanesini aç
+        selectPublisher(true);
     }
 
     private void initViews() {
+        btnTabAltinKarma = findViewById(R.id.btn_tab_altinkarma);
+        btnTabOkyanus = findViewById(R.id.btn_tab_okyanus);
+        txtBadgeLine1 = findViewById(R.id.txt_badge_line1);
+        txtBadgeLine2 = findViewById(R.id.txt_badge_line2);
+        containerAltinKarma = findViewById(R.id.container_altinkarma);
+        containerOkyanus = findViewById(R.id.container_okyanus);
+
         layoutHeaderBar = findViewById(R.id.layout_header_bar);
         btnBack = findViewById(R.id.btn_back);
         txtHeaderTitle = findViewById(R.id.txt_header_title);
@@ -80,11 +105,49 @@ public class MainActivity extends AppCompatActivity implements SourceAdapter.OnI
         recyclerView = findViewById(R.id.recycler_source_list);
         progressBar = findViewById(R.id.progress_loading);
 
+        edtOkyanusCode = findViewById(R.id.edt_okyanus_code);
+        btnOkyanusGo = findViewById(R.id.btn_okyanus_go);
+        btnOpenAkilliogretim = findViewById(R.id.btn_open_akilliogretim);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new SourceAdapter(this);
         recyclerView.setAdapter(adapter);
 
         btnBack.setOnClickListener(v -> handleBack());
+    }
+
+    private void setupPublisherTabs() {
+        btnTabAltinKarma.setOnClickListener(v -> selectPublisher(true));
+        btnTabOkyanus.setOnClickListener(v -> selectPublisher(false));
+    }
+
+    private void selectPublisher(boolean isAltinKarma) {
+        if (isAltinKarma) {
+            btnTabAltinKarma.setSelected(true);
+            btnTabOkyanus.setSelected(false);
+            txtBadgeLine1.setText("ALTIN KARMA");
+            txtBadgeLine2.setText("YAYINLARI");
+            containerAltinKarma.setVisibility(View.VISIBLE);
+            containerOkyanus.setVisibility(View.GONE);
+
+            if (navStack.isEmpty()) {
+                loadLevel("2", "", true);
+            } else {
+                recyclerView.post(() -> {
+                    if (recyclerView.getChildCount() > 0) {
+                        recyclerView.getChildAt(0).requestFocus();
+                    }
+                });
+            }
+        } else {
+            btnTabAltinKarma.setSelected(false);
+            btnTabOkyanus.setSelected(true);
+            txtBadgeLine1.setText("OKYANUS");
+            txtBadgeLine2.setText("YAYINCILIK");
+            containerAltinKarma.setVisibility(View.GONE);
+            containerOkyanus.setVisibility(View.VISIBLE);
+            btnOpenAkilliogretim.requestFocus();
+        }
     }
 
     private void setupSearch() {
@@ -114,6 +177,21 @@ public class MainActivity extends AppCompatActivity implements SourceAdapter.OnI
         });
     }
 
+    private void setupOkyanus() {
+        btnOkyanusGo.setOnClickListener(v -> {
+            String code = edtOkyanusCode.getText().toString().trim();
+            if (code.isEmpty()) {
+                Toast.makeText(this, "Lütfen karekod numarasını girin!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            openPlayer("https://www.akilliogretim.com/VideoList/" + code, "Okyanus Test " + code);
+        });
+
+        btnOpenAkilliogretim.setOnClickListener(v -> {
+            openPlayer("https://www.akilliogretim.com", "Akıllı Öğretim - Okyanus");
+        });
+    }
+
     private void loadLevel(String id, String title, boolean isSourceList) {
         progressBar.setVisibility(View.VISIBLE);
         edtSearch.setText("");
@@ -137,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements SourceAdapter.OnI
                 reader.close();
 
                 JSONObject root = new JSONObject(sb.toString());
-                boolean status = root.optBoolean("status", true);
 
                 if (isSourceList) {
                     JSONArray sources = root.optJSONArray("sources");
@@ -158,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements SourceAdapter.OnI
                         });
                         return;
                     } else {
-                        // Eğer sources boşsa, doğrudan soru listesini (content_list) yükle
+                        // Eğer sources boşsa doğrudan soru listesini (content_list) yükle
                         loadLevel(id, title, false);
                         return;
                     }
@@ -209,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements SourceAdapter.OnI
             layoutHeaderBar.setVisibility(View.GONE);
         }
 
-        // TV kumandası için ilk elemana otomatik odaklan
+        // TV kumandası için ilk satıra otomatik odaklan (Turuncu çerçeve hemen belirir)
         recyclerView.post(() -> {
             if (recyclerView.getChildCount() > 0) {
                 recyclerView.getChildAt(0).requestFocus();
@@ -219,41 +296,53 @@ public class MainActivity extends AppCompatActivity implements SourceAdapter.OnI
 
     @Override
     public void onItemClick(SourceItem item, int position) {
-        if (item.isParent) {
-            // Bir alt kategoriye veya kitaba geç
+        if (item.type == SourceItem.TYPE_CATEGORY) {
+            // Üst kategori (TYT, AYT, Sınıflar, Kitaplar) -> Alt kategorileri aç
             loadLevel(item.id, item.name, true);
-        } else {
+        } else if (item.type == SourceItem.TYPE_TEST) {
+            // Test veya Ders (Türkçe, Matematik, 1. Test vb.) -> Soruları yükle (content_list)
+            loadLevel(item.id, item.name, false);
+        } else if (item.type == SourceItem.TYPE_QUESTION) {
             // Soruya tıklandı -> Çözüm videosunu oynat
             openQuestionPlayer(item);
         }
     }
 
     private void openQuestionPlayer(SourceItem item) {
-        String playerUrl;
+        String playerUrl = null;
 
-        if ("fernus".equalsIgnoreCase(item.solvedType)) {
-            String pdf = (item.swf != null) ? item.swf.replace(".swf", ".pdf") : "";
-            playerUrl = "https://altinkarma.frns.in/soru_cozum/web_player/?mp3=" + item.audio
+        if ("fernus".equalsIgnoreCase(item.solvedType) || (item.video != null && !item.video.trim().isEmpty())) {
+            String swf = (item.swf != null) ? item.swf : "";
+            String pdf = swf.replace(".swf", ".pdf");
+            String audio = (item.audio != null) ? item.audio : "";
+            String video = (item.video != null) ? item.video : "";
+
+            playerUrl = "https://altinkarma.frns.in/soru_cozum/web_player/?mp3=" + audio
                     + "&pdf=" + pdf
-                    + "&swf=" + item.swf
-                    + "&xaml=" + item.video;
-        } else if ("video".equalsIgnoreCase(item.solvedType)) {
-            playerUrl = item.url;
-        } else if ("youtube".equalsIgnoreCase(item.solvedType)) {
-            playerUrl = item.url;
-        } else {
+                    + "&swf=" + swf
+                    + "&xaml=" + video;
+        } else if (item.url != null && !item.url.trim().isEmpty()) {
             playerUrl = item.url;
         }
 
+        if (playerUrl == null || playerUrl.trim().isEmpty()) {
+            Toast.makeText(this, "Bu sorunun çözüm videosu henüz eklenmemiş!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        openPlayer(playerUrl, item.name);
+    }
+
+    private void openPlayer(String url, String title) {
         Intent intent = new Intent(this, TVPlayerActivity.class);
-        intent.putExtra("TARGET_URL", playerUrl);
-        intent.putExtra("PAGE_TITLE", item.name);
+        intent.putExtra("TARGET_URL", url);
+        intent.putExtra("PAGE_TITLE", title);
         startActivity(intent);
     }
 
     private void handleBack() {
         if (navStack.size() > 1) {
-            navStack.pop(); // Mevcut adımı çıkar
+            navStack.pop();
             NavigationStep prev = navStack.peek();
             currentItems = prev.items;
             adapter.setData(currentItems);
@@ -279,6 +368,10 @@ public class MainActivity extends AppCompatActivity implements SourceAdapter.OnI
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (containerOkyanus.getVisibility() == View.VISIBLE) {
+                selectPublisher(true);
+                return true;
+            }
             if (navStack.size() > 1) {
                 handleBack();
                 return true;
