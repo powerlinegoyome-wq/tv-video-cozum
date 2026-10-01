@@ -118,6 +118,8 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:hint="Yazmaya başla..."
+                    android:focusable="false"
+                    android:clickable="true"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:singleLine="true"

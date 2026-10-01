@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements SourceAdapter.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_main);
 
         initViews();
@@ -87,6 +88,16 @@ public class MainActivity extends AppCompatActivity implements SourceAdapter.OnI
     }
 
     private void setupSearch() {
+        edtSearch.setOnClickListener(v -> {
+            edtSearch.setFocusable(true);
+            edtSearch.setFocusableInTouchMode(true);
+            edtSearch.requestFocus();
+            android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.showSoftInput(edtSearch, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

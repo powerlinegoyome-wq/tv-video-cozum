@@ -36,27 +36,26 @@ jobs:
       - name: Prepare APK Asset
         run: |
           mkdir -p release_apk
-          cp app/build/outputs/apk/debug/app-debug.apk release_apk/VideoCozum_TV_v1.1.apk
+          cp app/build/outputs/apk/debug/app-debug.apk release_apk/VideoCozum_TV_v1.1.1.apk
           ls -la release_apk/
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: VideoCozum_TV_APK
-          path: release_apk/VideoCozum_TV_v1.1.apk
+          path: release_apk/VideoCozum_TV_v1.1.1.apk
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/heads/main')
         with:
-          tag_name: v1.1.0
-          name: "Video Çözüm TV v1.1.0 (Altın Karma Birebir Tasarım & Kumanda Uyumu)"
+          tag_name: v1.1.1
+          name: "Video Çözüm TV v1.1.1 (Kumanda ve Arayüz İyileştirmeleri)"
           body: |
-            ## Video Çözüm TV v1.1.0 - Android TV Tam Sürüm
+            ## Video Çözüm TV v1.1.1
             
-            Bu sürüm `kitap.txt` içerisindeki tüm ekran görüntülerindeki görsel hiyerarşi ve tasarıma birebir sadık kalınarak yeniden derlenmiştir:
-            - **Resmi Altın Karma Kütüphane Ağacı:** Sene / Branş -> Sınıf -> Kitap -> Ünite -> Test -> Soru hiyerarşisi.
-            - **TV Kumandası (D-Pad) Odaklama:** Listede yön tuşlarıyla gezinme, OK ile seçme, Geri tuşuyla önceki menüye çıkma.
-            - **Canlı Video Çözüm Oynatıcı:** Sesli/vektörel ve MP4 soru çözümleri tam ekran TV ölçekli.
-          files: release_apk/VideoCozum_TV_v1.1.apk
+            - `kitap.txt` içindeki tüm ekran görüntülerine (Kategori, Sınıf, Kitap, Ünite, Test, Soru) birebir uyumlu tasarım.
+            - TV kumandasıyla açılışta klavye engeli kaldırıldı, ilk liste öğesine otomatik odaklanma sağlandı.
+            - Tam ekran çözüm oynatıcı ve D-Pad kumanda kontrolleri optimize edildi.
+          files: release_apk/VideoCozum_TV_v1.1.1.apk
           token: ${{ secrets.GITHUB_TOKEN }}
