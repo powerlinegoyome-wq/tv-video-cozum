@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_main"
+    android:orientation="horizontal"
+    android:padding="32dp">
+
+    <!-- Sol Sütun: Yayın Seçimi & Bilgi -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingEnd="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_main"
+            android:textColor="@color/text_primary"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/subtitle_main"
+            android:textColor="@color/text_secondary"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="12dp"
+            android:text="YAYIN SEÇİNİZ:"
+            android:textColor="@color/text_highlight"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <!-- Okyanus Kartı -->
+        <FrameLayout
+            android:id="@+id/card_okyanus"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/card_tv_selector"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/txt_okyanus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
+                android:text="🌊 Okyanus Yayınları (Akıllı Öğretim)"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <!-- Altın Karma Kartı -->
+        <FrameLayout
+            android:id="@+id/card_altinkarma"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/card_tv_selector"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/txt_altinkarma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
+                android:text="⭐ Altın Karma Video Çözüm"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <!-- Kütüphane / Kitaplar Butonu -->
+        <Button
+            android:id="@+id/btn_browse_portal"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/btn_num_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="📚 Kütüphane / Tüm Kitaplara Git"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="İpucu: Kumandanın yön tuşlarıyla sağdaki numaratörden kitaptaki karekod numarasını girip doğrudan test çözümüne ulaşabilirsiniz."
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- Sağ Sütun: Büyük TV Numaratörü (D-Pad Keyboard) -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/card_tv_selector"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/txt_selected_publisher_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aktif: Okyanus Yayınları"
+            android:textColor="@color/text_highlight"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Kod Gösterge Alanı -->
+        <TextView
+            android:id="@+id/txt_barcode_display"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/btn_num_selector"
+            android:gravity="center"
+            android:hint="Karekod Numarası"
+            android:textColor="@color/focus_border"
+            android:textColorHint="#64748B"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <!-- Numpad Grid -->
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*">
+
+            <TableRow android:layout_marginBottom="8dp">
+                <Button
+                    android:id="@+id/btn_num_1"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/btn_num_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="1"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp" />
+                <Button
+                    android:id="@+id/btn_num_2"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/btn_num_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="2"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp" />
+                <Button
+                    android:id="@+id/btn_num_3"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/btn_num_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="3"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp" />
+            </TableRow>
+
+            <TableRow android:layout_marginBottom="8dp">
+                <Button
+                    android:id="@+id/btn_num_4"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/btn_num_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="4"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp" />
+                <Button
+                    android:id="@+id/btn_num_5"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/btn_num_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="5"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp" />
+                <Button
+                    android:id="@+id/btn_num_6"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/btn_num_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="6"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp" />
+            </TableRow>
+
+            <TableRow android:layout_marginBottom="8dp">
+                <Button
+                    android:id="@+id/btn_num_7"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/btn_num_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="7"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp" />
+                <Button
+                    android:id="@+id/btn_num_8"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/btn_num_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="8"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp" />
+                <Button
+                    android:id="@+id/btn_num_9"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/btn_num_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="9"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp" />
+            </TableRow>
+
+            <TableRow>
+                <Button
+                    android:id="@+id/btn_clear"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/btn_num_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="⌫ SİL"
+                    android:textColor="@color/btn_red"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/btn_num_0"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/btn_num_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="0"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp" />
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/btn_action_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="AÇ ▶"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+</LinearLayout>

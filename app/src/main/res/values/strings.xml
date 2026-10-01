@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Video Çözüm TV</string>
+    <string name="title_main">Video Çözüm TV</string>
+    <string name="subtitle_main">Altın Karma &amp; Okyanus Yayınları Soru Çözümleri</string>
+    <string name="tab_okyanus">Okyanus Yayıncılık</string>
+    <string name="tab_altinkarma">Altın Karma</string>
+    <string name="enter_barcode">Kitap üzerindeki karekod veya barkod numarasını girin:</string>
+    <string name="btn_search">Çözümleri Aç</string>
+    <string name="btn_clear">Temizle</string>
+    <string name="btn_backspace">Sil</string>
+    <string name="btn_browse_all">Tüm Kitapları Listele</string>
+    <string name="loading">Yükleniyor...</string>
+</resources>

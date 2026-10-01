@@ -1,0 +1,66 @@
+name: Build Video Cozum TV APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Android TV APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
+
+      - name: Build Android APK
+        run: |
+          gradle assembleDebug --stacktrace
+
+      - name: Prepare APK Asset
+        run: |
+          mkdir -p release_apk
+          cp app/build/outputs/apk/debug/app-debug.apk release_apk/VideoCozum_TV_v1.0.apk
+          ls -la release_apk/
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: VideoCozum_TV_APK
+          path: release_apk/VideoCozum_TV_v1.0.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/heads/main')
+        with:
+          tag_name: v1.0.0
+          name: "Video Çözüm TV v1.0.0 (Kumanda Uyumlu)"
+          body: |
+            ## Video Çözüm TV - Android TV Soru Çözüm Uygulaması
+            
+            Bu sürüm TV uzaktan kumandası (D-Pad) ile tam uyumludur:
+            - **Altın Karma & Okyanus Yayınları** video çözümleri.
+            - Kitaptaki karekod numarasını TV kumandasıyla kolayca girmek için **Büyük TV Numaratörü**.
+            - Kumanda odaklama motoru (Spatial Navigation Engine) ve tam ekran video oynatıcı.
+            - Dokunmatik ekran ve kamera zorunluluğu kaldırılmıştır.
+            
+            ### Kurulum:
+            Aşağıdaki `VideoCozum_TV_v1.0.apk` dosyasını Android TV'nize (Downloader uygulaması veya USB bellek ile) yükleyebilirsiniz.
+          files: release_apk/VideoCozum_TV_v1.0.apk
+          token: ${{ secrets.GITHUB_TOKEN }}
