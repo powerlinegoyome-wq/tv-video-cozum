@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             updatePublisherUI();
         });
 
-        cardAltinkarma.setOnClickListener(v -> {
+        cardAltinKarma.setOnClickListener(v -> {
             currentPublisher = PUBLISHER_ALTINKARMA;
             updatePublisherUI();
         });
