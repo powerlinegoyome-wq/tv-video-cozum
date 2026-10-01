@@ -36,31 +36,27 @@ jobs:
       - name: Prepare APK Asset
         run: |
           mkdir -p release_apk
-          cp app/build/outputs/apk/debug/app-debug.apk release_apk/VideoCozum_TV_v1.0.apk
+          cp app/build/outputs/apk/debug/app-debug.apk release_apk/VideoCozum_TV_v1.1.apk
           ls -la release_apk/
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: VideoCozum_TV_APK
-          path: release_apk/VideoCozum_TV_v1.0.apk
+          path: release_apk/VideoCozum_TV_v1.1.apk
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/heads/main')
         with:
-          tag_name: v1.0.0
-          name: "Video Çözüm TV v1.0.0 (Kumanda Uyumlu)"
+          tag_name: v1.1.0
+          name: "Video Çözüm TV v1.1.0 (Altın Karma Birebir Tasarım & Kumanda Uyumu)"
           body: |
-            ## Video Çözüm TV - Android TV Soru Çözüm Uygulaması
+            ## Video Çözüm TV v1.1.0 - Android TV Tam Sürüm
             
-            Bu sürüm TV uzaktan kumandası (D-Pad) ile tam uyumludur:
-            - **Altın Karma & Okyanus Yayınları** video çözümleri.
-            - Kitaptaki karekod numarasını TV kumandasıyla kolayca girmek için **Büyük TV Numaratörü**.
-            - Kumanda odaklama motoru (Spatial Navigation Engine) ve tam ekran video oynatıcı.
-            - Dokunmatik ekran ve kamera zorunluluğu kaldırılmıştır.
-            
-            ### Kurulum:
-            Aşağıdaki `VideoCozum_TV_v1.0.apk` dosyasını Android TV'nize (Downloader uygulaması veya USB bellek ile) yükleyebilirsiniz.
-          files: release_apk/VideoCozum_TV_v1.0.apk
+            Bu sürüm `kitap.txt` içerisindeki tüm ekran görüntülerindeki görsel hiyerarşi ve tasarıma birebir sadık kalınarak yeniden derlenmiştir:
+            - **Resmi Altın Karma Kütüphane Ağacı:** Sene / Branş -> Sınıf -> Kitap -> Ünite -> Test -> Soru hiyerarşisi.
+            - **TV Kumandası (D-Pad) Odaklama:** Listede yön tuşlarıyla gezinme, OK ile seçme, Geri tuşuyla önceki menüye çıkma.
+            - **Canlı Video Çözüm Oynatıcı:** Sesli/vektörel ve MP4 soru çözümleri tam ekran TV ölçekli.
+          files: release_apk/VideoCozum_TV_v1.1.apk
           token: ${{ secrets.GITHUB_TOKEN }}

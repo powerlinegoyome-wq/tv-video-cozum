@@ -154,6 +154,28 @@ public class TVPlayerActivity extends AppCompatActivity {
                 String cssCleanup = "javascript:(function() {" +
                         "var elms = document.querySelectorAll('.app-banner, .mobile-app-download, #smart-banner');" +
                         "elms.forEach(function(el){ el.style.display = 'none'; });" +
+                        "var canvas = document.getElementById('canvas');" +
+                        "if (canvas) {" +
+                        "  canvas.style.maxWidth = '100%';" +
+                        "  canvas.style.maxHeight = '88vh';" +
+                        "  canvas.style.margin = '0 auto';" +
+                        "  canvas.style.display = 'block';" +
+                        "  document.body.style.backgroundColor = '#000000';" +
+                        "  document.body.style.overflow = 'hidden';" +
+                        "}" +
+                        "var audio = document.getElementById('sound');" +
+                        "if (audio) {" +
+                        "  audio.play();" +
+                        "  window.addEventListener('keydown', function(e) {" +
+                        "    if (e.key === 'Enter' || e.keyCode === 13) {" +
+                        "      if (audio.paused) audio.play(); else audio.pause();" +
+                        "    } else if (e.key === 'ArrowLeft' || e.keyCode === 37) {" +
+                        "      audio.currentTime = Math.max(0, audio.currentTime - 5);" +
+                        "    } else if (e.key === 'ArrowRight' || e.keyCode === 39) {" +
+                        "      audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);" +
+                        "    }" +
+                        "  }, true);" +
+                        "}" +
                         "})();";
                 webView.evaluateJavascript(cssCleanup, null);
             }
